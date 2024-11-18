@@ -1,15 +1,18 @@
 package edu.grinnell.csc207.blockchains;
+import java.io.PrintWriter;
 
 /**
  * Encapsulated hashes.
  *
- * @author Your Name Here
+ * @author Tiffany
+ * @author Moses
  * @author Samuel A. Rebelsky
  */
 public class Hash {
   // +--------+------------------------------------------------------
   // | Fields |
   // +--------+
+  private byte[] data;
 
   // +--------------+------------------------------------------------
   // | Constructors |
@@ -22,7 +25,11 @@ public class Hash {
    *   The data to copy into the hash.
    */
   public Hash(byte[] data) {
-    // STUB
+    byte[] copy = new byte[data.length];
+    for (int i = 0; i < data.length; i++) {
+      copy[i] = data[i];
+    } //for
+    this.data = copy;
   } // Hash(byte[])
 
   // +---------+-----------------------------------------------------
@@ -35,7 +42,7 @@ public class Hash {
    * @return the number of bytes in the hash.
    */
   public int length() {
-    return 0;   // STUB
+    return this.data.length;
   } // length()
 
   /**
@@ -48,7 +55,7 @@ public class Hash {
    * @return the ith byte
    */
   public byte get(int i) {
-    return 0;   // STUB
+    return this.data[i];
   } // get()
 
   /**
@@ -58,7 +65,11 @@ public class Hash {
    * @return a copy of the bytes in the hash.
    */
   public byte[] getBytes() {
-    return new byte[] {1, 2, 3, 4, 5};      // STUB
+    byte[] copy = new byte[data.length];
+    for (int i = 0; i < data.length; i++) {
+      copy[i] = data[i];
+    } //for
+    return copy;
   } // getBytes()
 
   /**
@@ -67,7 +78,10 @@ public class Hash {
    * @return the hash as a hex string.
    */
   public String toString() {
-    return "";          // STUB
+    StringBuilder final = new StringBuilder();
+    for (int i = 0; i < this.data.length; i++) {
+      final.append(String.format("%02X", ));
+    }
   } // toString()
 
   /**
