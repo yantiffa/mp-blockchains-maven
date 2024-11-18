@@ -1,5 +1,5 @@
 package edu.grinnell.csc207.blockchains;
-import java.io.PrintWriter;
+import java.lang.StringBuilder;
 
 /**
  * Encapsulated hashes.
@@ -78,10 +78,11 @@ public class Hash {
    * @return the hash as a hex string.
    */
   public String toString() {
-    StringBuilder final = new StringBuilder();
-    for (int i = 0; i < this.data.length; i++) {
-      final.append(String.format("%02X", ));
-    }
+    StringBuilder outcome = new StringBuilder("");
+    for (byte b: this.data) {
+      outcome.append(String.format("%02X", b));
+    } //for
+    return outcome.toString();
   } // toString()
 
   /**
@@ -94,7 +95,13 @@ public class Hash {
    *   otherwise.
    */
   public boolean equals(Object other) {
-    return false;       // STUB
+    if (other instanceof Hash) {
+      Hash otherHash = (Hash)other;
+      if (this.data == otherHash.data) {
+        return true;
+      } //if
+    } //if
+    return false;
   } // equals(Object)
 
   /**
