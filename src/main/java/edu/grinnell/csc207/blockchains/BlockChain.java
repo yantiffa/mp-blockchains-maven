@@ -16,21 +16,43 @@ public class BlockChain implements Iterable<Transaction> {
   // | Fields |
   // +--------+
 
-  private final HashValidator validator; // Validator for hash validation
-  private Node head;                     // Head of the chain
-  private Node tail;                     // Tail of the chain
-  private int size;                      // Number of blocks in the chain
+  /**
+   * Validator for hash validation.
+   */
+  private final HashValidator validator;
+
+  /**
+   * Head of the chain.
+   */
+  private Node head;
+
+  /**
+   * Tail of the chain.
+   */
+  private Node tail;
+
+  /**
+   * Number of blocks in the chain.
+   */
+  private int size;
 
   // A node in the blockchain
   private static class Node {
+    /**
+     * The data of the block.
+     */
     Block data;
+
+    /**
+     * the node after the current block.
+     */
     Node next;
 
-    Node(Block data, Node next) {
-      this.data = data;
-      this.next = next;
-    }
-  }
+    Node(Block datas, Node nexts) {
+      this.data = datas;
+      this.next = nexts;
+    } // Node
+  } // Node
 
   // +--------------+------------------------------------------------
   // | Constructors |
@@ -44,7 +66,7 @@ public class BlockChain implements Iterable<Transaction> {
   public BlockChain(HashValidator check) {
     if (check == null) {
       throw new IllegalArgumentException("HashValidator cannot be null.");
-    }
+    } // if
 
     this.validator = check;
 
@@ -55,12 +77,12 @@ public class BlockChain implements Iterable<Transaction> {
     // Validate the genesis block
     if (!validator.isValid(genesisBlock.getHash())) {
       throw new IllegalStateException("Genesis block is invalid.");
-    }
+    } // if
 
     this.head = new Node(genesisBlock, null);
     this.tail = head;
     this.size = 1;
-  }
+  } // BlockChain
 
   // +---------+-----------------------------------------------------
   // | Methods |
@@ -74,19 +96,19 @@ public class BlockChain implements Iterable<Transaction> {
       @Override
       public boolean hasNext() {
         return current != null;
-      }
+      } //hasNext()
 
       @Override
       public Transaction next() {
         if (!hasNext()) {
           throw new NoSuchElementException();
-        }
+        } //if
         Transaction transaction = current.data.getTransaction();
         current = current.next;
         return transaction;
-      }
+      } //next()
     };
-  }
+  } //iterator()
 
   /**
    * Mine for a new valid block for the end of the chain, returning that block.
@@ -97,15 +119,15 @@ public class BlockChain implements Iterable<Transaction> {
   public Block mine(Transaction t) {
     if (t == null) {
       throw new IllegalArgumentException("Transaction cannot be null.");
-    }
+    } //if
 
     // Validate the transaction (e.g., source must have sufficient balance)
     if (!t.getSource().isEmpty() && balance(t.getSource()) < t.getAmount()) {
       throw new IllegalArgumentException("Insufficient balance for source: " + t.getSource());
-    }
+    } //if
 
     return new Block(size, t, tail.data.getHash(), validator);
-  }
+  } //mine()
 
   /**
    * Get the number of blocks currently in the chain.
@@ -114,7 +136,7 @@ public class BlockChain implements Iterable<Transaction> {
    */
   public int getSize() {
     return size;
-  }
+  } //getSize()
 
   /**
    * Add a block to the end of the chain.
@@ -125,14 +147,14 @@ public class BlockChain implements Iterable<Transaction> {
   public void append(Block blk) {
     if (!blk.getPrevHash().equals(tail.data.getHash())) {
       throw new IllegalArgumentException("Previous hash mismatch.");
-    }
+    } //if
     if (!validator.isValid(blk.getHash())) {
       throw new IllegalArgumentException("Block hash is invalid.");
-    }
+    } //if
     tail.next = new Node(blk, null);
     tail = tail.next;
     size++;
-  }
+  } //append()
 
   /**
    * Attempt to remove the last block from the chain.
@@ -142,16 +164,16 @@ public class BlockChain implements Iterable<Transaction> {
   public boolean removeLast() {
     if (size == 1) {
       return false;
-    }
+    } //if
     Node current = head;
     while (current.next != tail) {
       current = current.next;
-    }
+    } //while
     current.next = null;
     tail = current;
     size--;
     return true;
-  }
+  } //removeLast()
 
   /**
    * Get the hash of the last block in the chain.
@@ -160,7 +182,7 @@ public class BlockChain implements Iterable<Transaction> {
    */
   public Hash getHash() {
     return tail.data.getHash();
-  }
+  } //getHash()
 
   /**
    * Check if the blockchain is valid.
@@ -176,21 +198,21 @@ public class BlockChain implements Iterable<Transaction> {
       // Validate hashes
       if (!nextBlock.getPrevHash().equals(currentBlock.getHash())) {
         return false;
-      }
+      } //if
       if (!validator.isValid(currentBlock.getHash())) {
         return false;
-      }
+      } //if
 
       // Validate the transaction
       Transaction t = currentBlock.getTransaction();
       if (!t.getSource().isEmpty() && balance(t.getSource()) < t.getAmount()) {
         return false;
-      }
+      } //if
 
       current = current.next;
-    }
+    } //while
     return true;
-  }
+  } //isCorrect()
 
   /**
    * Ensure the blockchain is valid or throw an exception if it isn't.
@@ -208,21 +230,21 @@ public class BlockChain implements Iterable<Transaction> {
       // Validate hashes
       if (!nextBlock.getPrevHash().equals(currentBlock.getHash())) {
         throw new Exception("Invalid previous hash at block " + blockNum);
-      }
+      } //if
       if (!validator.isValid(currentBlock.getHash())) {
         throw new Exception("Invalid hash at block " + blockNum);
-      }
+      } //if
 
       // Validate the transaction
       Transaction t = currentBlock.getTransaction();
       if (!t.getSource().isEmpty() && balance(t.getSource()) < t.getAmount()) {
         throw new Exception("Invalid transaction at block " + blockNum);
-      }
+      } //if
 
       current = current.next;
       blockNum++;
-    }
-  }
+    } //while
+  } //check()
 
   /**
    * Return an iterator of all the people who participated in the system.
@@ -236,18 +258,18 @@ public class BlockChain implements Iterable<Transaction> {
     // Skip genesis block
     if (current != null) {
       current = current.next;
-    }
+    } //if
 
     while (current != null) {
       Transaction transaction = current.data.getTransaction();
       if (!transaction.getSource().isEmpty()) {
         users.add(transaction.getSource());
-      }
+      } //if
       users.add(transaction.getTarget());
       current = current.next;
-    }
+    } //while
     return users.iterator();
-  }
+  } //Iterator
 
   /**
    * Find one user's balance.
@@ -262,20 +284,20 @@ public class BlockChain implements Iterable<Transaction> {
     // Skip genesis block
     if (current != null && current.data.getTransaction().getAmount() == 0) {
       current = current.next;
-    }
+    } //if
 
     while (current != null) {
       Transaction transaction = current.data.getTransaction();
       if (transaction.getSource().equals(user)) {
         balance -= transaction.getAmount();
-      }
+      } //if
       if (transaction.getTarget().equals(user)) {
         balance += transaction.getAmount();
-      }
+      } //if
       current = current.next;
-    }
+    } //while
     return balance;
-  }
+  } //balance
 
   /**
    * Get an iterator for all the blocks in the chain.
@@ -289,17 +311,17 @@ public class BlockChain implements Iterable<Transaction> {
       @Override
       public boolean hasNext() {
         return current != null;
-      }
+      } //hasNext()
 
       @Override
       public Block next() {
         if (!hasNext()) {
           throw new NoSuchElementException();
-        }
+        } //if
         Block block = current.data;
         current = current.next;
         return block;
-      }
+      } //next()
     };
-  }
+  } //Iterator()
 } // class BlockChain

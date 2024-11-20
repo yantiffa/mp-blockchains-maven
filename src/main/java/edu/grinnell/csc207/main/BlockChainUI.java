@@ -1,5 +1,6 @@
 package edu.grinnell.csc207.main;
 
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -38,17 +39,17 @@ public class BlockChainUI {
    */
   public static void instructions(PrintWriter pen) {
     pen.println("""
-      Valid commands:
-        mine: discovers the nonce for a given transaction
-        append: appends a new block onto the end of the chain
-        remove: removes the last block from the end of the chain
-        check: checks that the block chain is valid
-        users: prints a list of users
-        balance: finds a user's balance
-        transactions: prints out the chain of transactions
-        blocks: prints out the chain of blocks (for debugging only)
-        help: prints this list of commands
-        quit: quits the program""");
+        Valid commands:
+          mine: discovers the nonce for a given transaction
+          append: appends a new block onto the end of the chain
+          remove: removes the last block from the end of the chain
+          check: checks that the block chain is valid
+          users: prints a list of users
+          balance: finds a user's balance
+          transactions: prints out the chain of transactions
+          blocks: prints out the chain of blocks (for debugging only)
+          help: prints this list of commands
+          quit: quits the program""");
   } // instructions(PrintWriter)
 
   // +------+--------------------------------------------------------
@@ -65,18 +66,17 @@ public class BlockChainUI {
     BufferedReader eyes = new BufferedReader(new InputStreamReader(System.in));
 
     // Set up our blockchain.
-    HashValidator validator =
-        (h) -> {
-          if (h.length() < VALIDATOR_BYTES) {
-            return false;
-          } // if
-          for (int v = 0; v < VALIDATOR_BYTES; v++) {
-            if (h.get(v) != 0) {
-              return false;
-            } // if
-          } // for
-          return true;
-        };
+    HashValidator validator = (h) -> {
+      if (h.length() < VALIDATOR_BYTES) {
+        return false;
+      } // if
+      for (int v = 0; v < VALIDATOR_BYTES; v++) {
+        if (h.get(v) != 0) {
+          return false;
+        } // if
+      } // for
+      return true;
+    };
     BlockChain chain = new BlockChain(validator);
 
     instructions(pen);
@@ -112,7 +112,7 @@ public class BlockChainUI {
             pen.println("Last block removed from the chain.");
           } else {
             pen.println("Cannot remove the last block (only one block in the chain).");
-          }
+          } // if
           break;
 
         case "check":
@@ -121,7 +121,7 @@ public class BlockChainUI {
             pen.println("Blockchain is valid.");
           } catch (Exception e) {
             pen.println("Blockchain is invalid: " + e.getMessage());
-          }
+          } // try/catch
           break;
 
         case "users":
@@ -129,7 +129,7 @@ public class BlockChainUI {
           Iterator<String> userIterator = chain.users();
           while (userIterator.hasNext()) {
             pen.println("- " + userIterator.next());
-          }
+          } // while
           break;
 
         case "balance":
@@ -142,7 +142,7 @@ public class BlockChainUI {
           pen.println("Transactions in the blockchain:");
           for (Transaction transaction : chain) {
             pen.println("- " + transaction);
-          }
+          } // for
           break;
 
         case "blocks":
@@ -150,7 +150,7 @@ public class BlockChainUI {
           Iterator<Block> blockIterator = chain.blocks();
           while (blockIterator.hasNext()) {
             pen.println(blockIterator.next());
-          }
+          } // while
           break;
 
         case "help":

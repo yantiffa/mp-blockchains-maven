@@ -1,5 +1,7 @@
 package edu.grinnell.csc207.blockchains;
+
 import java.lang.StringBuilder;
+import java.util.Arrays;
 
 /**
  * Encapsulated hashes.
@@ -12,6 +14,9 @@ public class Hash {
   // +--------+------------------------------------------------------
   // | Fields |
   // +--------+
+  /**
+   * Array that stores byte of array.
+   */
   private byte[] data;
 
   // +--------------+------------------------------------------------
@@ -21,14 +26,13 @@ public class Hash {
   /**
    * Create a new encapsulated hash.
    *
-   * @param data
-   *   The data to copy into the hash.
+   * @param datas The data to copy into the hash.
    */
-  public Hash(byte[] data) {
-    byte[] copy = new byte[data.length];
-    for (int i = 0; i < data.length; i++) {
-      copy[i] = data[i];
-    } //for
+  public Hash(byte[] datas) {
+    byte[] copy = new byte[datas.length];
+    for (int i = 0; i < datas.length; i++) {
+      copy[i] = datas[i];
+    } // for
     this.data = copy;
   } // Hash(byte[])
 
@@ -48,9 +52,7 @@ public class Hash {
   /**
    * Get the ith byte.
    *
-   * @param i
-   *   The index of the byte to get, between 0 (inclusive) and
-   *   length() (exclusive).
+   * @param i The index of the byte to get, between 0 (inclusive) and length() (exclusive).
    *
    * @return the ith byte
    */
@@ -59,8 +61,7 @@ public class Hash {
   } // get()
 
   /**
-   * Get a copy of the bytes in the hash. We make a copy so that the client
-   * cannot change them.
+   * Get a copy of the bytes in the hash. We make a copy so that the client cannot change them.
    *
    * @return a copy of the bytes in the hash.
    */
@@ -68,7 +69,7 @@ public class Hash {
     byte[] copy = new byte[data.length];
     for (int i = 0; i < data.length; i++) {
       copy[i] = data[i];
-    } //for
+    } // for
     return copy;
   } // getBytes()
 
@@ -79,28 +80,27 @@ public class Hash {
    */
   public String toString() {
     StringBuilder outcome = new StringBuilder("");
-    for (byte b: this.data) {
+    for (byte b : this.data) {
       outcome.append(String.format("%02X", b));
-    } //for
+    } // for
     return outcome.toString();
   } // toString()
 
   /**
    * Determine if this is equal to another object.
    *
-   * @param other
-   *   The object to compare to.
+   * @param other The object to compare to.
    *
-   * @return true if the two objects are conceptually equal and false
-   *   otherwise.
+   * @return true if the two objects are conceptually equal and false otherwise.
    */
   public boolean equals(Object other) {
-    if (other instanceof Hash) {
-      Hash otherHash = (Hash)other;
-      if (this.data == otherHash.data) {
-        return true;
-      } //if
-    } //if
+    if (!(other instanceof Hash)) {
+      return false;
+    } // if
+    Hash otherHash = (Hash) other;
+    if (Arrays.equals(this.data, otherHash.data)) {
+      return true;
+    } // if
     return false;
   } // equals(Object)
 
