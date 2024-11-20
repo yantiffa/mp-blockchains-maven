@@ -14,6 +14,7 @@ import edu.grinnell.csc207.util.IOUtils;
 
 /**
  * A simple UI for our BlockChain class.
+ * This is written for csc207 fall 2024
  *
  * @author Moise Milenge
  * @author Tiffany Yan

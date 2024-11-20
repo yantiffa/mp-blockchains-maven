@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 /**
  * Encapsulated hashes.
+ * This is written for csc207 fall 2024
  *
  * @author Tiffany
  * @author Moses

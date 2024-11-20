@@ -8,6 +8,7 @@ package edu.grinnell.csc207.blockchains;
 public interface HashValidator {
   /**
    * Determine if a hash meets some criterion.
+   * 
    *
    * @param hash
    *   The hash we're checking.

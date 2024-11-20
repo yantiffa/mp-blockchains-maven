@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * Blocks to be stored in blockchains.
+ * This is written for csc207 fall 2024
  *
  * @author Moise Milenge
  * @author Tiffany Yan

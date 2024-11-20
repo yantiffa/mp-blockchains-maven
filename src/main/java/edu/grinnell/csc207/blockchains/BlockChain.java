@@ -7,6 +7,7 @@ import java.util.HashSet;
 
 /**
  * A full blockchain.
+ * This is written for csc207 fall 2024
  *
  * @author Moise Milenge
  * @author Tiffany Yan
